@@ -7,7 +7,7 @@ namespace Task1
         static void Main(string[] args)
         {
             Console.WriteLine("Введите число");
-            string number = Console.ReadLine();
+            string number = Console.ReadLine().Trim();
             int temp = 0;
             try
             {
