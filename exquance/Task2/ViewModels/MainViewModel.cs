@@ -1,58 +1,50 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
+using System.ComponentModel;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using Task2.Models;
+using Task2.ViewModels;
 
-namespace Task2
+namespace Task2.ViewModels
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : Window
+    public class MainViewModel : BaseViewModel
     {
-        public MainWindow()
-        {
-            InitializeComponent();
-        }
+        public char[][] Field { get; set; }
 
-        char[][] field = new char[][] { new []{ EMPTY_CHAR, EMPTY_CHAR, EMPTY_CHAR }, new [] { EMPTY_CHAR, EMPTY_CHAR, EMPTY_CHAR }, new [] { EMPTY_CHAR, EMPTY_CHAR, EMPTY_CHAR } };
+        public RelayCommand ButtonClickCommand { get; private set; }
 
         const char userChar = 'X';
         const char computerChar = 'O';
         const char EMPTY_CHAR = ' ';
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        public MainViewModel()
         {
-            var selectedCell = sender as Button;
-            int x = Grid.GetRow(selectedCell);
-            int y = Grid.GetColumn(selectedCell);
+            ButtonClickCommand = new RelayCommand(DoButtonClick);
+            InitField();
+        }
 
-            field[x][y] = userChar;
-            selectedCell.Content = userChar;
+        private void DoButtonClick(object obj)
+        {
+            int x = Convert.ToInt32(obj) / 10;
+            int y = Convert.ToInt32(obj) % 10;
 
-            if (CheckWin(userChar, field))
+            Field[x][y] = userChar;
+            RaisePropertyChanged(nameof(Field));
+
+            if (CheckWin(userChar, Field))
             {
                 MessageBox.Show("победа игрока");
                 InitField();
             }
 
-            var move = GetComputerMove(field);
+            var move = GetComputerMove(Field);
+
             if (move != null)
             {
-                field[move.x][move.y] = computerChar;
-                (this.FindName("cell" + move.x + move.y) as Button).Content = computerChar;
-                if (CheckWin(computerChar, field))
+                Field[move.x][move.y] = computerChar;
+                RaisePropertyChanged(nameof(Field));
+                if (CheckWin(computerChar, Field))
                 {
                     MessageBox.Show("победа компьютера");
                     InitField();
@@ -60,7 +52,7 @@ namespace Task2
             }
             else
             {
-                if (CheckDraw(field))
+                if (CheckDraw(Field))
                 {
                     MessageBox.Show("ничья");
                     InitField();
@@ -68,19 +60,18 @@ namespace Task2
             }
         }
 
+
         private void InitField()
         {
-            field = new char[][] { new[] { EMPTY_CHAR, EMPTY_CHAR, EMPTY_CHAR }, new[] { EMPTY_CHAR, EMPTY_CHAR, EMPTY_CHAR }, new[] { EMPTY_CHAR, EMPTY_CHAR, EMPTY_CHAR } };
-            for (int i = 0; i < 3; i++)
-                for (int j = 0; j < 3; j++)
-                    (this.FindName("cell" + i + j) as Button).Content = string.Empty;
+            Field = new char[][] { new[] { EMPTY_CHAR, EMPTY_CHAR, EMPTY_CHAR }, new[] { EMPTY_CHAR, EMPTY_CHAR, EMPTY_CHAR }, new[] { EMPTY_CHAR, EMPTY_CHAR, EMPTY_CHAR } };
+            RaisePropertyChanged(nameof(Field));
         }
 
         private bool CheckWin(char player, char[][] board)
         {
-            for (int i = 0; i < 3; i ++)
+            for (int i = 0; i < 3; i++)
             {
-                if (board[i][0]== board[i][1] && board[i][0] == board[i][2] && board[i][0] == player)
+                if (board[i][0] == board[i][1] && board[i][0] == board[i][2] && board[i][0] == player)
                     return true;
             }
             for (int i = 0; i < 3; i++)
@@ -182,23 +173,5 @@ namespace Task2
             }
             return move;
         }
-    }
-
-    public class Move
-    {
-        public Move(int x, int y)
-        {
-            this.x = x;
-            this.y = y;
-        }
-
-        public int x { get; set; }
-        public int y { get; set; }
-    }
-
-    enum Turn
-    {
-        Computer,
-        User,
     }
 }

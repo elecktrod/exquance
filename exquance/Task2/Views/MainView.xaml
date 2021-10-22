@@ -1,0 +1,39 @@
+﻿<Window x:Class="Task2.Views.MainView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Task2"
+        xmlns:viewModels="clr-namespace:Task2.ViewModels"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="400" Width="400"
+        DataContext="{DynamicResource viewModel}" >
+    <Window.Resources>
+        <viewModels:MainViewModel x:Key="viewModel"/>
+        <Style TargetType="{x:Type Button}">
+            <Setter Property="Margin" Value="2,0,2,0"/>
+            <Setter Property="FontSize" Value="50"/>
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Button Grid.Row="0" Grid.Column="0" Content="{Binding Field[0][0]}" Command="{Binding ButtonClickCommand}" CommandParameter="00"/>
+        <Button Grid.Row="0" Grid.Column="1" Content="{Binding Field[0][1]}" Command="{Binding ButtonClickCommand}" CommandParameter="01"/>
+        <Button Grid.Row="0" Grid.Column="2" Content="{Binding Field[0][2]}" Command="{Binding ButtonClickCommand}" CommandParameter="02"/>
+        <Button Grid.Row="1" Grid.Column="0" Content="{Binding Field[1][0]}" Command="{Binding ButtonClickCommand}" CommandParameter="10"/>
+        <Button Grid.Row="1" Grid.Column="1" Content="{Binding Field[1][1]}" Command="{Binding ButtonClickCommand}" CommandParameter="11"/>
+        <Button Grid.Row="1" Grid.Column="2" Content="{Binding Field[1][2]}" Command="{Binding ButtonClickCommand}" CommandParameter="12"/>
+        <Button Grid.Row="2" Grid.Column="0" Content="{Binding Field[2][0]}" Command="{Binding ButtonClickCommand}" CommandParameter="20"/>
+        <Button Grid.Row="2" Grid.Column="1" Content="{Binding Field[2][1]}" Command="{Binding ButtonClickCommand}" CommandParameter="21"/>
+        <Button Grid.Row="2" Grid.Column="2" Content="{Binding Field[2][2]}" Command="{Binding ButtonClickCommand}" CommandParameter="22"/>
+    </Grid>
+</Window>
